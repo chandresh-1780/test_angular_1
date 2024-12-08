@@ -1,0 +1,73 @@
+<div class="flex flex-col gap-6 justify-center top-[10%] h-[100%] w-[80%] m-auto">
+
+    <div class="grid grid-cols-[40px_40px_auto] grid-flow-col-dense mt-11 gap-1">
+        <div></div>
+        <div class="h-full relative ">
+            <span
+                class="bg-white border border-2 border-[#BEBEBE] h-[40px] w-[40px]  p-2 flex items-center justify-center rounded-full z-10">
+                <mat-icon class="text-[#999999]" aria-hidden="false" aria-label="Example home icon">
+                    <span class="material-symbols-outlined">
+                        format_list_bulleted
+                    </span></mat-icon>
+            </span>
+            <div [ngClass]="{'hidden':!task_list.length}"
+                class="border border-[#BEBEBE] absolute h-[130%] top-0 left-[18px] w-1 bg-[#BEBEBE]  z-[-10]">
+            </div>
+        </div>
+        <div class="w-[80%] ml-4 p-4 bg-[#F6F6F6] ">
+            <textarea [(ngModel)]="text" matInput placeholder="Add a note about {{username}}..." class="px-3 w-full"
+                (focus)="onFocus()" (blur)="onBlur()"></textarea>
+            <div *ngIf="isfocused" class="px-3 mt-2 flex justify-between">
+                <div class="flex flex-row flex-wrap gap-5">
+                    <div *ngFor="let button of buttons"
+                        [ngClass]="selectedIcon == button.icon ? 'bg-[#00C6EE]' : 'bg-white'"
+                        class="rounded-full flex items-center justify-center w-[40px] h-[40px] p-2 border-2 border-[#BEBEBE] "
+                        (click)="changeIconColor(button.icon)">
+                        <mat-icon class="text-[22px] " aria-hidden="false" aria-label="Example home icon"
+                            [ngClass]="selectedIcon == button.icon ? 'text-white' : 'text-[#999999]'">
+                            <span class="material-symbols-outlined">{{button.icon}}</span>
+                        </mat-icon>
+
+                    </div>
+                </div>
+                <div class=" bg-[#52C8B4] rounded-sm h-[32px] flex justify-center items-center text-white">
+                    <button mat-button (click)="submitTask()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @for (item of task_list; track $index) {
+    <div class="grid grid-cols-[40px_40px_auto] grid-flow-col-dense gap-1" (mouseenter)="hoverIndex = $index"
+        (mouseleave)="hoverIndex = -1">
+        <div class="text-sm pt-2 flex justify-end">
+            {{getDaysCount(item.note_time)}}
+        </div>
+        <div class="h-full relative">
+            <span
+                class=" bg-white   border-2 border-[#BEBEBE]  h-[40px] w-[40px] p-2 flex items-center justify-center rounded-full z-10">
+                <mat-icon class="text-[#999999]" aria-hidden="false" aria-label="Example home icon">
+                    <span class="material-symbols-outlined">{{item.icon}}</span>
+                </mat-icon>
+            </span>
+
+            <div class="border border-[#BEBEBE] absolute h-[130%] top-0 left-[18px] w-1 bg-[#BEBEBE] z-[-10]"></div>
+        </div>
+        <div class="ml-4 w-[80%] p-4 bg-[#F6F6F6] flex flex-row justify-between items-center">
+            <div class="flex flex-col font-[400]">
+                <div>
+                    <span class="text-[#00C6EE] font-bold ">You</span>
+                    <span> {{item.message}} </span>
+                    <span class="text-[#00C6EE]  font-bold">{{username}}</span>
+                </div>
+                <div>
+                    <p>{{item.note_text}}</p>
+                </div>
+            </div>
+            <div class=" rounded-sm bg-[#52C8B4] h-[32px] flex justify-center items-center text-white">
+                <button mat-button *ngIf="hoverIndex === $index" (click)="deleteTask($index)">Delete</button>
+            </div>
+        </div>
+    </div>
+    }
+</div>
